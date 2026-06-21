@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Smart Library{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-shield-lock me-2"></i>Admin Dashboard</h2>
+</div>
+
+<!-- Navigation Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3 mb-3">
+        <a href="{{ url_for('admin_books') }}" class="card h-100 text-decoration-none">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-journal-bookmark display-5 mb-3" style="color: #4f46e5;"></i>
+                <h6 class="card-title">Manage Books</h6>
+                <p class="small text-secondary mb-0">Add, edit, delete</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-md-3 mb-3">
+        <a href="{{ url_for('admin_users') }}" class="card h-100 text-decoration-none">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-people display-5 mb-3" style="color: #7c3aed;"></i>
+                <h6 class="card-title">Manage Users</h6>
+                <p class="small text-secondary mb-0">View accounts</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-md-3 mb-3">
+        <a href="{{ url_for('admin_analytics') }}" class="card h-100 text-decoration-none">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-graph-up-arrow display-5 mb-3" style="color: #06b6d4;"></i>
+                <h6 class="card-title">Analytics</h6>
+                <p class="small text-secondary mb-0">Charts & stats</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-md-3 mb-3">
+        <a href="{{ url_for('admin_recommendations') }}" class="card h-100 text-decoration-none">
+            <div class="card-body text-center py-4">
+                <i class="bi bi-cpu display-5 mb-3" style="color: #f59e0b;"></i>
+                <h6 class="card-title">Recommendations</h6>
+                <p class="small text-secondary mb-0">Algorithm settings</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_users }}</div>
+            <div>Total Users</div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_books }}</div>
+            <div>Total Books</div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_ratings }}</div>
+            <div>Total Ratings</div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="stat-card">
+            <div class="stat-number">{{ "%.1f"|format(stats.avg_rating or 0) }}</div>
+            <div>Average Rating</div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="mb-3"><i class="bi bi-graph-up me-2"></i>Most Rated Books</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Ratings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in most_rated %}
+                            <tr>
+                                <td>{{ book.title }}</td>
+                                <td>{{ book.author }}</td>
+                                <td><span class="badge bg-primary">{{ book.rating_count }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="mb-3"><i class="bi bi-trophy text-warning me-2"></i>Highest Rated Books</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Avg Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in highest_rated %}
+                            <tr>
+                                <td>{{ book.title }}</td>
+                                <td>{{ book.author }}</td>
+                                <td>
+                                    <span class="badge bg-warning text-dark">
+                                        {{ "%.1f"|format(book.avg_rating) }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

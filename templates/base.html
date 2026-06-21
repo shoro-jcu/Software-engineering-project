@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Library{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #7c3aed;
+            --accent-color: #06b6d4;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --input-bg: #334155;
+            --border-color: #475569;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1e1b4b 100%);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(15, 23, 42, 0.98) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary) !important;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-primary) !important;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .card-body {
+            color: var(--text-primary);
+        }
+
+        .card-title {
+            color: var(--text-primary);
+        }
+
+        .card-subtitle, .card-text {
+            color: var(--text-secondary) !important;
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            color: white !important;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 12px;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+            color: var(--text-primary);
+        }
+
+        .btn-warning {
+            color: #000;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            border: none;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+        }
+
+        .form-control, .form-select {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 10px;
+            padding: 12px 16px;
+        }
+
+        .form-control::placeholder {
+            color: #64748b;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: var(--input-bg);
+            border-color: var(--primary-color);
+            color: var(--text-primary);
+            box-shadow: 0 0 0 0.25rem rgba(79, 70, 229, 0.25);
+        }
+
+        .form-select option {
+            background: var(--card-bg);
+            color: var(--text-primary);
+        }
+
+        .form-label {
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 16px 20px;
+        }
+
+        .alert-success {
+            background: rgba(22, 163, 74, 0.2);
+            color: #86efac;
+        }
+
+        .alert-danger {
+            background: rgba(220, 38, 38, 0.2);
+            color: #fca5a5;
+        }
+
+        .alert-warning {
+            background: rgba(234, 179, 8, 0.2);
+            color: #fde047;
+        }
+
+        .alert-info {
+            background: rgba(6, 182, 212, 0.2);
+            color: #67e8f9;
+        }
+
+        .badge {
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-weight: 500;
+        }
+
+        .bg-primary {
+            background: var(--primary-color) !important;
+        }
+
+        .bg-secondary {
+            background: var(--input-bg) !important;
+        }
+
+        .bg-warning {
+            background: #f59e0b !important;
+        }
+
+        .bg-danger {
+            background: #dc2626 !important;
+        }
+
+        .text-dark {
+            color: #000 !important;
+        }
+
+        .stars {
+            color: #fbbf24;
+        }
+
+        .recommendation-reason {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.3), rgba(6, 182, 212, 0.3));
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            color: #e0f2fe;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(124, 58, 237, 0.15));
+            border-radius: 24px;
+            padding: 60px 40px;
+            margin-bottom: 40px;
+        }
+
+        .hero-section h1 {
+            color: var(--text-primary);
+        }
+
+        .hero-section p {
+            color: var(--text-secondary);
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(6, 182, 212, 0.2));
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .genre-badge {
+            background: rgba(79, 70, 229, 0.3);
+            color: #c7d2fe;
+            border-radius: 20px;
+            padding: 4px 16px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .genre-badge:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .rating-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .rating-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Table styles for dark theme */
+        .table {
+            color: var(--text-primary);
+        }
+
+        .table-dark {
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .table thead th {
+            background: rgba(79, 70, 229, 0.3);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+            font-weight: 600;
+            padding: 14px 16px;
+        }
+
+        .table tbody td {
+            background: rgba(30, 41, 59, 0.5);
+            border-color: var(--border-color);
+            vertical-align: middle;
+            padding: 12px 16px;
+            color: var(--text-primary);
+        }
+
+        .table tbody tr {
+            background: rgba(30, 41, 59, 0.3);
+        }
+
+        .table tbody tr:hover td {
+            background: rgba(79, 70, 229, 0.15);
+        }
+
+        .table-hover tbody tr:hover {
+            background: rgba(79, 70, 229, 0.15);
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.9);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 60px;
+            padding: 40px 0;
+        }
+
+        footer h5 {
+            color: var(--text-primary);
+        }
+
+        /* ==================== MOBILE RESPONSIVE STYLES ==================== */
+        @media (max-width: 576px) {
+            /* Navbar */
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+
+            .navbar-collapse {
+                background: rgba(15, 23, 42, 0.98);
+                padding: 1rem;
+                border-radius: 12px;
+                margin-top: 0.5rem;
+            }
+
+            .nav-link {
+                padding: 0.75rem 1rem !important;
+                border-radius: 8px;
+            }
+
+            .nav-link:hover {
+                background: rgba(79, 70, 229, 0.2);
+            }
+
+            .dropdown-menu {
+                background: rgba(30, 41, 59, 0.95);
+                border: 1px solid var(--border-color);
+                margin-top: 0.5rem;
+            }
+
+            /* Hero Section */
+            .hero-section {
+                padding: 30px 20px;
+                border-radius: 16px;
+                margin-bottom: 24px;
+            }
+
+            .hero-section h1 {
+                font-size: 1.75rem;
+            }
+
+            .hero-section p {
+                font-size: 0.95rem;
+            }
+
+            /* Cards */
+            .card {
+                border-radius: 12px;
+            }
+
+            .card:hover {
+                transform: none;
+            }
+
+            .card-body {
+                padding: 1rem;
+            }
+
+            /* Stat Cards */
+            .stat-card {
+                padding: 16px;
+                margin-bottom: 12px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            /* Buttons */
+            .btn-primary {
+                width: 100%;
+                margin-bottom: 8px;
+                padding: 12px 20px;
+            }
+
+            .btn-sm {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            /* Tables */
+            .table {
+                font-size: 0.85rem;
+            }
+
+            .table thead th {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+
+            .table tbody td {
+                padding: 10px 12px;
+            }
+
+            /* Form Controls */
+            .form-control, .form-select {
+                padding: 10px 14px;
+                font-size: 1rem;
+            }
+
+            /* Modal */
+            .modal-dialog {
+                margin: 0.5rem;
+            }
+
+            .modal-content {
+                border-radius: 12px;
+            }
+
+            .modal-header {
+                padding: 1rem;
+            }
+
+            .modal-body {
+                padding: 1rem;
+            }
+
+            .modal-footer {
+                padding: 1rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            /* Pagination */
+            .pagination {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-link {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            /* Footer */
+            footer {
+                padding: 24px 0;
+            }
+
+            footer h5 {
+                font-size: 1.1rem;
+            }
+
+            footer p {
+                font-size: 0.85rem;
+            }
+
+            /* Book Grid - Single column on mobile */
+            .book-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* Charts */
+            canvas {
+                max-width: 100%;
+                height: auto !important;
+            }
+
+            /* Text sizes */
+            h1 { font-size: 1.75rem !important; }
+            h2 { font-size: 1.5rem !important; }
+            h3 { font-size: 1.25rem !important; }
+            h4 { font-size: 1.1rem !important; }
+
+            /* Alerts */
+            .alert {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+
+            /* Badge */
+            .badge {
+                padding: 4px 8px;
+                font-size: 0.75rem;
+            }
+
+            /* Recommendation cards */
+            .recommendation-reason {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+
+            /* Profile section */
+            .profile-avatar {
+                width: 100px !important;
+                height: 100px !important;
+            }
+
+            /* Book detail */
+            .book-detail-cover {
+                max-width: 150px;
+                margin: 0 auto;
+            }
+
+            /* Action buttons row */
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .action-buttons .btn {
+                width: 100%;
+                margin-bottom: 4px;
+            }
+
+            /* Stars rating */
+            .stars {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Tablet Responsive */
+        @media (min-width: 577px) and (max-width: 992px) {
+            .card-columns-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .navbar-collapse {
+                flex-grow: 0;
+            }
+        }
+
+        /* Desktop and up */
+        @media (min-width: 993px) {
+            .card-columns-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .card-columns-4 {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Modal styles */
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Dropdown styles */
+        .dropdown-menu {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .dropdown-item {
+            color: var(--text-primary);
+        }
+
+        .dropdown-item:hover {
+            background: rgba(79, 70, 229, 0.2);
+            color: var(--text-primary);
+        }
+
+        .dropdown-divider {
+            border-color: var(--border-color);
+        }
+
+        /* Form range */
+        .form-range::-webkit-slider-thumb {
+            background: var(--primary-color);
+        }
+
+        .form-range::-webkit-slider-runnable-track {
+            background: var(--input-bg);
+        }
+
+        /* Radio buttons */
+        .form-check-input {
+            background-color: var(--input-bg);
+            border-color: var(--border-color);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .search-box input {
+            padding-left: 48px;
+        }
+
+        /* Border colors */
+        .border-bottom {
+            border-color: var(--border-color) !important;
+        }
+
+        .border-secondary {
+            border-color: var(--border-color) !important;
+        }
+
+        /* Additional text colors */
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+
+        .text-secondary {
+            color: var(--text-secondary) !important;
+        }
+
+        .text-accent {
+            color: var(--accent-color) !important;
+        }
+
+        .text-danger {
+            color: #f87171 !important;
+        }
+
+        .text-warning {
+            color: #fbbf24 !important;
+        }
+
+        .text-success {
+            color: #4ade80 !important;
+        }
+
+        /* Links */
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--primary-color);
+        }
+
+        /* h1-h6 headings */
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-primary);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="bi bi-book-half me-2"></i>Smart Library
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i class="bi bi-house me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('books') }}">
+                            <i class="bi bi-bookshelf me-1"></i>Books
+                        </a>
+                    </li>
+                    {% if session.user_id %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_dashboard') if session.is_admin else url_for('dashboard') }}">
+                            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if session.user_id %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i>{{ session.username }}
+                            {% if session.is_admin %}<span class="badge bg-danger ms-1">Admin</span>{% endif %}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="{{ url_for('profile') }}">
+                                <i class="bi bi-person me-2"></i>Profile
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('admin_dashboard') if session.is_admin else url_for('dashboard') }}">
+                                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">
+                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary btn-sm ms-2" href="{{ url_for('register') }}">
+                            <i class="bi bi-person-plus me-1"></i>Register
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show animate-fade-in">
+                        <i class="bi bi-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' if category == 'warning' else 'info-circle' }} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="bi bi-book-half me-2"></i>Smart Library</h5>
+                    <p class="text-secondary">Intelligent book recommendation system based on collaborative filtering</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-secondary mb-0">Personalized recommendations based on user ratings</p>
+                    <p class="text-secondary">Using cosine similarity to calculate user similarity</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

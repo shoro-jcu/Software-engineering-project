@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Library - Book Recommendations{% endblock %}
+
+{% block content %}
+<div class="hero-section animate-fade-in text-center">
+    <h1 class="display-4 mb-4">
+        <i class="bi bi-book-half me-3"></i>Smart Library
+    </h1>
+    <p class="lead mb-4">
+        Discover books tailored to your taste with our intelligent recommendation engine
+    </p>
+    {% if not session.user_id %}
+    <div class="mt-4">
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg me-3">
+            <i class="bi bi-person-plus me-2"></i>Get Started
+        </a>
+        <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+        </a>
+    </div>
+    {% else %}
+    <div class="mt-4">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">
+            <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Features Section -->
+<div class="row mb-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-magic display-4 mb-3"></i>
+                <h5 class="card-title">Smart Recommendations</h5>
+                <p class="card-text">Get personalized book suggestions based on your reading history and preferences</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-star-fill display-4 mb-3"></i>
+                <h5 class="card-title">Rate & Review</h5>
+                <p class="card-text">Share your thoughts by rating books and writing reviews to help others discover great reads</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="bi bi-people display-4 mb-3"></i>
+                <h5 class="card-title">Community Driven</h5>
+                <p class="card-text">Recommendations powered by collaborative filtering from readers like you</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popular Books Section -->
+<section class="mb-5">
+    <h2 class="mb-4">
+        <i class="bi bi-fire me-2"></i>Popular Books
+    </h2>
+    <div class="row">
+        {% for book in popular_books %}
+        <div class="col-6 col-md-4 col-lg-2 mb-4">
+            <a href="{{ url_for('book_detail', book_id=book.id) }}" class="card h-100 text-decoration-none">
+                <img src="{{ book.cover_image or 'https://via.placeholder.com/200x300/1e293b/f1f5f9?text=No+Cover' }}" 
+                     class="card-img-top" alt="{{ book.title }}">
+                <div class="card-body">
+                    <span class="genre-badge mb-2 d-inline-block">{{ book.genre }}</span>
+                    <h6 class="card-title">{{ book.title }}</h6>
+                    <p class="card-text">{{ book.author }}</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="badge bg-primary">{{ book.rating_count }} ratings</span>
+                        <span class="stars">
+                            <i class="bi bi-star-fill"></i> {{ "%.1f"|format(book.avg_rating or 0) }}
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-3">
+        <a href="{{ url_for('books') }}" class="btn btn-outline-primary">
+            Browse All Books <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section>
+    <h2 class="mb-4">
+        <i class="bi bi-question-circle me-2"></i>How It Works
+    </h2>
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="display-1 mb-3 text-primary">1</div>
+                    <h5>Create Account</h5>
+                    <p class="card-text">Sign up for free and create your reading profile</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="display-1 mb-3 text-primary">2</div>
+                    <h5>Rate Books</h5>
+                    <p class="card-text">Read and rate books you've enjoyed with 1-5 stars</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="display-1 mb-3 text-primary">3</div>
+                    <h5>Get Recommendations</h5>
+                    <p class="card-text">Our algorithm finds books similar users loved</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="display-1 mb-3 text-primary">4</div>
+                    <h5>Discover & Enjoy</h5>
+                    <p class="card-text">Explore new favorites and expand your reading horizons</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

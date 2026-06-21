@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}User Management - Smart Library{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-people me-2"></i>User Management</h2>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Bio</th>
+                        <th>Ratings</th>
+                        <th>Avg Rating</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>
+                            <i class="bi bi-person-circle me-1"></i>{{ user.username }}
+                        </td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.bio or '-' }}</td>
+                        <td>
+                            <span class="badge bg-primary">{{ user.rating_count or 0 }}</span>
+                        </td>
+                        <td>
+                            {% if user.avg_rating %}
+                            <span class="stars">
+                                {% for i in range(5) %}
+                                    {% if i < user.avg_rating|int %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% else %}
+                                        <i class="bi bi-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="ms-1">{{ "%.1f"|format(user.avg_rating) }}</span>
+                            {% else %}
+                            <span>-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.is_admin %}
+                            <span class="badge bg-danger"><i class="bi bi-shield-lock me-1"></i>Admin</span>
+                            {% else %}
+                            <span class="badge bg-secondary">User</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('admin_toggle_admin', user_id=user.id) }}" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-warning" 
+                                        {% if user.id == session.user_id %}disabled{% endif %}
+                                        title="Toggle admin status">
+                                    <i class="bi bi-shield{% if user.is_admin %}-fill{% endif %}"></i>
+                                </button>
+                            </form>
+                            <form method="POST" action="{{ url_for('admin_delete_user', user_id=user.id) }}" 
+                                  class="d-inline" onsubmit="return confirm('Delete this user and all their ratings?')">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                        {% if user.id == session.user_id %}disabled{% endif %}>
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-primary">
+        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+{% endblock %}
